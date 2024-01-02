@@ -41,22 +41,17 @@ export const Answer = ({
                 <Stack horizontal horizontalAlign="space-between">
                     <AnswerIcon />
                     <div>
-                        <IconButton
-                            style={{ color: "black" }}
-                            iconProps={{ iconName: "Lightbulb" }}
-                            title="Show thought process"
-                            ariaLabel="Show thought process"
-                            onClick={() => onThoughtProcessClicked()}
-                            disabled={!answer.choices[0].context.thoughts?.length}
-                        />
+                        
                         <IconButton
                             style={{ color: "black" }}
                             iconProps={{ iconName: "ClipboardList" }}
-                            title="Show supporting content"
-                            ariaLabel="Show supporting content"
-                            onClick={() => onSupportingContentClicked()}
-                            disabled={!answer.choices[0].context.data_points?.length}
-                        />
+                            title="Kopiere den Text!"
+                            ariaLabel="Kopiere den Text"
+                            onClick={() => navigator.clipboard.writeText(messageContent)}
+                            > 
+                            Copy
+                        </IconButton>
+                        
                     </div>
                 </Stack>
             </Stack.Item>
@@ -68,7 +63,7 @@ export const Answer = ({
             {!!parsedAnswer.citations.length && (
                 <Stack.Item>
                     <Stack horizontal wrap tokens={{ childrenGap: 5 }}>
-                        <span className={styles.citationLearnMore}>Citations:</span>
+                        <span className={styles.citationLearnMore}>Quellen:</span>
                         {parsedAnswer.citations.map((x, i) => {
                             const path = getCitationFilePath(x);
                             return (

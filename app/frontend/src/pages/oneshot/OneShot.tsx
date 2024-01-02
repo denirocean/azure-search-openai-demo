@@ -174,7 +174,7 @@ export function Component(): JSX.Element {
                         <AnswerError error={error.toString()} onRetry={() => makeApiRequest(lastQuestionRef.current)} />
                     </div>
                 ) : null}
-                {activeAnalysisPanelTab && answer && (
+                {/*{activeAnalysisPanelTab && answer && (
                     <AnalysisPanel
                         className={styles.oneshotAnalysisPanel}
                         activeCitation={activeCitation}
@@ -183,7 +183,7 @@ export function Component(): JSX.Element {
                         answer={answer}
                         activeTab={activeAnalysisPanelTab}
                     />
-                )}
+                )}*/}
             </div>
 
             <Panel

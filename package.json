@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.15.0",
+    "react-modal": "^3.16.1",
+    "reactjs-popup": "^2.0.6"
+  }
+}

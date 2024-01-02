@@ -1,6 +1,6 @@
 import { Outlet, NavLink, Link } from "react-router-dom";
 
-import github from "../../assets/github.svg";
+import github from "../../assets/WBD_Logo_0.svg";
 
 import styles from "./Layout.module.css";
 
@@ -13,36 +13,34 @@ const Layout = () => {
         <div className={styles.layout}>
             <header className={styles.header} role={"banner"}>
                 <div className={styles.headerContainer}>
+                    <li className={styles.headerTitleContainer}>
+                                    <a href="https://chat.wb-duisburg.de/" title="Startseite">
+                                        <img
+                                            src={github}
+                                            alt="Github logo"
+                                            aria-label="Startseite"
+                                            width="120px"
+                                            height="120px"
+                                            className={styles.githubLogo}
+                                        />
+                                    </a>
+                    </li>
                     <Link to="/" className={styles.headerTitleContainer}>
-                        <h3 className={styles.headerTitle}>GPT + Enterprise data | Sample</h3>
+                        <h3 className={styles.headerTitle}></h3>
                     </Link>
                     <nav>
                         <ul className={styles.headerNavList}>
                             <li>
                                 <NavLink to="/" className={({ isActive }) => (isActive ? styles.headerNavPageLinkActive : styles.headerNavPageLink)}>
-                                    Chat
                                 </NavLink>
                             </li>
                             <li className={styles.headerNavLeftMargin}>
                                 <NavLink to="/qa" className={({ isActive }) => (isActive ? styles.headerNavPageLinkActive : styles.headerNavPageLink)}>
-                                    Ask a question
                                 </NavLink>
-                            </li>
-                            <li className={styles.headerNavLeftMargin}>
-                                <a href="https://aka.ms/entgptsearch" target={"_blank"} title="Github repository link">
-                                    <img
-                                        src={github}
-                                        alt="Github logo"
-                                        aria-label="Link to github repository"
-                                        width="20px"
-                                        height="20px"
-                                        className={styles.githubLogo}
-                                    />
-                                </a>
                             </li>
                         </ul>
                     </nav>
-                    <h4 className={styles.headerRightText}>Azure OpenAI + Cognitive Search</h4>
+                    <h4 className={styles.headerRightText}>Beta | GPT-4</h4>
                     {useLogin && <LoginButton />}
                 </div>
             </header>

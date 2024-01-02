@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { Checkbox, Panel, DefaultButton, TextField, SpinButton, Dropdown, IDropdownOption } from "@fluentui/react";
 import { SparkleFilled } from "@fluentui/react-icons";
 import readNDJSONStream from "ndjson-readablestream";
+import logo from "../../assets/logo.png";
 
 import styles from "./Chat.module.css";
 
@@ -20,7 +21,7 @@ import { TokenClaimsDisplay } from "../../components/TokenClaimsDisplay";
 const Chat = () => {
     const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
     const [promptTemplate, setPromptTemplate] = useState<string>("");
-    const [retrieveCount, setRetrieveCount] = useState<number>(3);
+    const [retrieveCount, setRetrieveCount] = useState<number>(5);
     const [retrievalMode, setRetrievalMode] = useState<RetrievalMode>(RetrievalMode.Hybrid);
     const [useSemanticRanker, setUseSemanticRanker] = useState<boolean>(true);
     const [shouldStream, setShouldStream] = useState<boolean>(true);
@@ -227,15 +228,25 @@ const Chat = () => {
         <div className={styles.container}>
             <div className={styles.commandsContainer}>
                 <ClearChatButton className={styles.commandButton} onClick={clearChat} disabled={!lastQuestionRef.current || isLoading} />
-                <SettingsButton className={styles.commandButton} onClick={() => setIsConfigPanelOpen(!isConfigPanelOpen)} />
+                {/*<SettingsButton className={styles.commandButton} onClick={() => setIsConfigPanelOpen(!isConfigPanelOpen)} />*/}
             </div>
             <div className={styles.chatRoot}>
                 <div className={styles.chatContainer}>
                     {!lastQuestionRef.current ? (
                         <div className={styles.chatEmptyState}>
-                            <SparkleFilled fontSize={"120px"} primaryFill={"rgba(115, 118, 225, 1)"} aria-hidden="true" aria-label="Chat logo" />
-                            <h1 className={styles.chatEmptyStateTitle}>Chat with your data</h1>
-                            <h2 className={styles.chatEmptyStateSubtitle}>Ask anything or try an example</h2>
+                            <a href="https://chat.wb-duisburg.de/" title="Startseite">
+                                        <img
+                                            src={logo}
+                                            alt="logo"
+                                            aria-label="Startseite"
+                                            width="237px"
+                                            height="65px"
+                                            className={styles.chatEmptyState}
+                                        />
+                                    </a>
+                            
+                            <h1 className={styles.chatEmptyStateSubtitle}>Wie kann ich dir helfen?</h1>
+                            <h2 className={styles.chatEmptyStateSubtitle}></h2>
                             <ExampleList onExampleClicked={onExampleClicked} />
                         </div>
                     ) : (
@@ -301,7 +312,7 @@ const Chat = () => {
                     <div className={styles.chatInput}>
                         <QuestionInput
                             clearOnSend
-                            placeholder="Type a new question (e.g. does my plan cover annual eye exams?)"
+                            placeholder="Gebe hier eine neue Frage ein..."
                             disabled={isLoading}
                             onSend={question => makeApiRequest(question)}
                         />

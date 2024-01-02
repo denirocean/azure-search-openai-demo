@@ -25,37 +25,35 @@ class ChatReadRetrieveReadApproach(Approach):
     """
     Simple retrieve-then-read implementation, using the Cognitive Search and OpenAI APIs directly. It first retrieves
     top documents from search, then constructs a prompt with them, and then uses OpenAI to generate an completion
-    (answer) with that prompt.
+    (answer) with that prompt. Be brief in your answers.
     """
-    system_message_chat_conversation = """Assistant helps the company employees with their healthcare plan questions, and questions about the employee handbook. Be brief in your answers.
-Answer ONLY with the facts listed in the list of sources below. If there isn't enough information below, say you don't know. Do not generate answers that don't use the sources below. If asking a clarifying question to the user would help, ask the question.
-For tabular information return it as an html table. Do not return markdown format. If the question is not in English, answer in the language used in the question.
-Each source has a name followed by colon and the actual information, always include the source name for each fact you use in the response. Use square brackets to reference the source, for example [info1.txt]. Don't combine sources, list each source separately, for example [info1.txt][info2.pdf].
-{follow_up_questions_prompt}
+    system_message_chat_conversation = """Du bist "wbdGPT" und Du unterstützt die Mitarbeiter der Wirtschaftsbetriebe Duisburg - AöR (kurz: WBD) bei allgemeinen Fragestellungen und zu Fragestellungen, die die Daten und Dokumente betreffen, die dir bereitgestellt wurden. Bitte stelle gegebenenfalls klärende Fragen, um zusätzliche Informationen zu erhalten. Verwende nur WBD-Kontext, wenn danach gefragt wird. Verwende eckige Klammern, um zu zitieren, und halte dich dabei an das Format [source_name]. Gebe für jedes Zitat die entsprechende Quelle einzeln an, z. B. [info1.txt] [info2.pdf]. Wenn du Zitate verwendest, dann sollte dies auch in den Zitierten Dokumenten wiedergefunden werden. Achte darauf, recht sicher zu sein, dass die Zitierung passt. Wenn du keine Zitate oder Fakten aus Daten in der Antwort hast oder unsicher bist, ist es wichtig, dass der Mitarbeiter dies versteht - gebe dann mindestes als Zitat folgendes an: [keine WBD-Quelle]. Halte dich bei den Antworten möglichst kurz.
 {injected_prompt}
 """
     follow_up_questions_prompt_content = """Generate 3 very brief follow-up questions that the user would likely ask next.
 Enclose the follow-up questions in double angle brackets. Example:
-<<Are there exclusions for prescriptions?>>
-<<Which pharmacies can be ordered from?>>
-<<What is the limit for over-the-counter medication?>>
+<<Nenne mir die exakten Zitate?>>
+<<Welche Empfehlung lässt sich daraus ableiten??>>
+<<Wer ist hierfür der Ansprechpartner?>>
 Do no repeat questions that have already been asked.
 Make sure the last question ends with ">>"."""
 
-    query_prompt_template = """Below is a history of the conversation so far, and a new question asked by the user that needs to be answered by searching in a knowledge base about employee healthcare plans and the employee handbook.
+    query_prompt_template = """Below is a history of the conversation so far, and a new question asked by the user that needs to be answered by searching in a knowledge base.
 You have access to Azure Cognitive Search index with 100's of documents.
 Generate a search query based on the conversation and the new question.
 Do not include cited source filenames and document names e.g info.txt or doc.pdf in the search query terms.
 Do not include any text inside [] or <<>> in the search query terms.
 Do not include any special characters like '+'.
-If the question is not in English, translate the question to English before generating the search query.
+If the question is not in German, translate the question to German before generating the search query.
 If you cannot generate a search query, return just the number 0.
 """
     query_prompt_few_shots = [
-        {"role": USER, "content": "What are my health plans?"},
-        {"role": ASSISTANT, "content": "Show available health plans"},
-        {"role": USER, "content": "does my plan cover cardio?"},
-        {"role": ASSISTANT, "content": "Health plan cardio coverage"},
+        {"role": USER, "content": "What is a product owner?"},
+        {"role": ASSISTANT, "content": "Show product owner defintion?"},
+        {"role": USER, "content": "Who is responsible for urban innovation at WBD?"},
+        {"role": ASSISTANT, "content": "Name the responsible employee"},
+        {"role": USER, "content": "Welche Daten sind hier bereits integriert?"},
+        {"role": ASSISTANT, "content": "Liste alle Daten und Dokumente auf mit einer sehr kurzen Zusammenfassung. Erwähne auch wie viele Daten du bereits integiert hast"},
     ]
 
     def __init__(
@@ -93,7 +91,7 @@ If you cannot generate a search query, return just the number 0.
         has_text = overrides.get("retrieval_mode") in ["text", "hybrid", None]
         has_vector = overrides.get("retrieval_mode") in ["vectors", "hybrid", None]
         use_semantic_captions = True if overrides.get("semantic_captions") and has_text else False
-        top = overrides.get("top", 3)
+        top = overrides.get("top", 5)
         filter = self.build_filter(overrides, auth_claims)
 
         original_user_query = history[-1]["content"]
